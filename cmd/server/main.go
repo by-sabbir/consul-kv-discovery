@@ -5,9 +5,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"strconv"
 
-	consulApi "github.com/hashicorp/consul/api"
+	consulApi "github.com/by-sabbir/consul-kv-discovery/pkg/consul"
 )
 
 var (
@@ -19,36 +18,12 @@ var (
 )
 
 func init() {
-	// started_at = time.Now()
-	consulConfig := &consulApi.Config{
-		Address: CONSUL_ADDR,
-	}
-	client, err := consulApi.NewClient(consulConfig)
+	cli, err := consulApi.NewClient(CONSUL_ADDR)
 	if err != nil {
-		log.Fatalf("error creating consul client: %v", err)
+		log.Fatalf("can't initiate consul client: %+v\n", err)
 	}
-
-	if err := client.Agent().ServiceDeregister(SERVICE_ID); err != nil {
-		log.Println("deregistration status: ", err)
-	}
-
-	serviceDefinition := &consulApi.AgentServiceRegistration{
-		ID:   SERVICE_ID,
-		Name: SERVICE_NAME,
-		Port: SERVICE_PORT,
-		Check: &consulApi.AgentServiceCheck{
-			HTTP:     "http://app:8000/health",
-			Interval: "15s",
-			Timeout:  "30s",
-			Notes:    "for medium blog",
-		},
-		Meta: map[string]string{
-			"host": SERVICE_HOST,
-			"port": strconv.Itoa(SERVICE_PORT),
-		},
-	}
-	if err := client.Agent().ServiceRegister(serviceDefinition); err != nil {
-		log.Fatalf("error registering service: %+v\n", err)
+	if err := cli.Register(SERVICE_ID); err != nil {
+		log.Println("error registering... ", err)
 	}
 }
 
