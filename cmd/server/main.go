@@ -11,11 +11,11 @@ import (
 )
 
 var (
-	CONSUL_ADDR  = "103.108.147.41:8500"
+	CONSUL_ADDR  = "consul:8500"
 	SERVICE_ID   = "go-service"
 	SERVICE_NAME = "go-service-test"
 	SERVICE_PORT = 8000
-	SERVICE_HOST = "localhost"
+	SERVICE_HOST = "0.0.0.0"
 )
 
 func init() {
