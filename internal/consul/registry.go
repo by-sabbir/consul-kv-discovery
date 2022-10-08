@@ -33,6 +33,12 @@ func init() {
 	consulStore := consulApi.NewKVClient(cli)
 
 	srvString := fmt.Sprintf("%s:%d", sd.ServiceHost, sd.ServicePort)
+
+	if err := consulStore.PutKV("apigw", "apigw.example.com"); err != nil {
+		log.Println("error creating key: ", err)
+
+	}
+
 	if err := consulStore.PutKV(sd.ServiceId, srvString); err != nil {
 		log.Println("error creating key: ", err)
 
