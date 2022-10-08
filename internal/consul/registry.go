@@ -30,7 +30,7 @@ func init() {
 	}
 	log.Println("service registered: ", sd.ServiceId)
 
-	consulStore := consulApi.NewKVClient(*cli)
+	consulStore := consulApi.NewKVClient(cli)
 
 	srvString := fmt.Sprintf("%s:%d", sd.ServiceHost, sd.ServicePort)
 	if err := consulStore.PutKV(sd.ServiceId, srvString); err != nil {

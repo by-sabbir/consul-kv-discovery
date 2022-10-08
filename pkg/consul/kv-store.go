@@ -10,7 +10,7 @@ type KVClient struct {
 	*api.KV
 }
 
-func NewKVClient(c ConsulClient) *KVClient {
+func NewKVClient(c *ConsulClient) *KVClient {
 	return &KVClient{
 		c.KV(),
 	}
@@ -31,7 +31,7 @@ func (k *KVClient) GetKV(key string) (string, error) {
 	p, _, err := k.Get(key, nil)
 	if err != nil {
 		log.Println("error getting value from key: ", err)
-		return "", nil
+		return "", err
 	}
 
 	return string(p.Value), nil
