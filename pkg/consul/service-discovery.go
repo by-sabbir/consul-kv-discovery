@@ -26,11 +26,17 @@ func NewClient(addr string) (*ConsulClient, error) {
 	}, nil
 }
 
-func (c ConsulClient) Register(id string) error {
+func (c *ConsulClient) Register(id string) error {
+	check := &api.AgentServiceCheck{
+		Interval: "30s",
+		Timeout:  "60s",
+		HTTP:     "http://app:8000/health",
+	}
 	serviceDefinition := &api.AgentServiceRegistration{
-		ID:   id,
-		Name: id + "_ms",
-		Tags: []string{"microservice", "golang"},
+		ID:    id,
+		Name:  id + "_ms",
+		Tags:  []string{"microservice", "golang"},
+		Check: check,
 	}
 	if err := c.Agent().ServiceRegister(serviceDefinition); err != nil {
 		log.Println("error registering service: ", err)
