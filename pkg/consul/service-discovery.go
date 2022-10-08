@@ -30,6 +30,7 @@ func (c ConsulClient) Register(id string) error {
 	serviceDefinition := &api.AgentServiceRegistration{
 		ID:   id,
 		Name: id + "_ms",
+		Tags: []string{"microservice", "golang"},
 	}
 	if err := c.Agent().ServiceRegister(serviceDefinition); err != nil {
 		log.Println("error registering service: ", err)
